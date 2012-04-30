@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE filesystem PUBLIC "//NetBeans//DTD Filesystem 1.1//EN" "http://www.netbeans.org/dtds/filesystem-1_1.dtd">
+
+<filesystem>
+    <folder name="Servers">
+        <file name="AS7WizardProvider.instance">
+            <attr name="instanceCreate" methodvalue="org.netbeans.modules.jbossas7.wizard.AS7WizardProvider.create"/>
+            <attr name="instanceClass" stringvalue="org.netbeans.modules.jbossas7.wizard.AS7WizardProvider"/>
+            <attr name="instanceOf" stringvalue="org.netbeans.spi.server.ServerWizardProvider"/>
+        </file>
+
+        <file name="AS7Provider.instance">
+            <attr name="instanceCreate" methodvalue="org.netbeans.modules.jbossas7.AS7InstanceProvider.getProvider"/>
+            <attr name="instanceClass" stringvalue="org.netbeans.modules.jbossas7.AS7InstanceProvider"/>
+            <attr name="instanceOf" stringvalue="org.netbeans.spi.server.ServerInstanceProvider"/>
+        </file>
+        
+    </folder>
+    <folder name="Jboss-AS7"></folder>
+</filesystem>
