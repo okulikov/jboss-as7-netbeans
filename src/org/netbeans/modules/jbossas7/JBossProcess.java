@@ -55,7 +55,7 @@ public class JBossProcess {
     }
 
     public String[] createEnvironment() {
-        ArrayList<String> envp = new ArrayList();
+        ArrayList<String> envp = new ArrayList<String>();
         envp.add("JBOSS_HOME=" + jbossHome);
         return envp.toArray(new String[envp.size()]);
     }

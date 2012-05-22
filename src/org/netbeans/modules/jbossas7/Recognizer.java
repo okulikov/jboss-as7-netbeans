@@ -18,11 +18,11 @@ public class Recognizer {
     private StringBuilder builder = new StringBuilder();
 
     public List<String> process(InputStream in) throws IOException {
-        ArrayList<String> tokens = new ArrayList();
+        ArrayList<String> tokens = new ArrayList<String>();
 
         int b;
-        while ((b = in.read()) != -1) {
-            char c = (char)b;
+        while (in.available() > 0){
+            char c = (char)in.read();
             switch (c) {
                 case '\t' :
                 case '\r' :

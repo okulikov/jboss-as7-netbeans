@@ -4,7 +4,9 @@
  */
 package org.netbeans.modules.jbossas7;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,14 +48,13 @@ public final class AS7Instance implements ServerInstanceImplementation, Lookup.P
     private ChangeSupport changeSupport = new ChangeSupport(this);
 
 
-    protected final CommandLineInterface cli = new CommandLineInterface();
+    protected final ManagementClient cli = new ManagementClient();
     private static final RequestProcessor RP = new RequestProcessor("JBoss-AS7",5); // NOI18N
 
     private StartServerTask startServer = new StartServerTask();
     private StopServerTask stopServer = new StopServerTask();
     private RestartTask restartServer = new RestartTask();
 
-    private List<String> applications;
     private static final Logger logger = Logger.getLogger("AS7Instance");
 
     public AS7Instance(String name, String path, boolean isDomain) {
@@ -105,8 +106,28 @@ public final class AS7Instance implements ServerInstanceImplementation, Lookup.P
         return name;
     }
 
-    public List<String> getApplications() {
-        return this.applications;
+    public Collection<String> getApplications() {
+        try {
+            return cli.getApplications();
+        } catch (IOException e) {
+            return new ArrayList();
+        }
+    }
+
+    public Collection<String> getExtensions() {
+        try {
+            return cli.getExtensions();
+        } catch (IOException e) {
+            return new ArrayList();
+        }
+    }
+
+    public Collection<String> getDatasources() {
+        try {
+            return cli.getDataSources();
+        } catch (IOException e) {
+            return new ArrayList();
+        }
     }
 
     @Override
@@ -166,12 +187,11 @@ public final class AS7Instance implements ServerInstanceImplementation, Lookup.P
         RP.post(restartServer);
     }
 
-    public void listApplications() {
-        cli.setListener(new ApplicationList());
-        cli.listApplications();
+    public Collection<String> listApplications() throws IOException {
+        return cli.getApplications();
     }
 
-    private class StartServerTask implements Runnable, CommandLineListener {
+    private class StartServerTask implements Runnable {
 
         private JBossProcess standalone = new JBossProcess("standalone");
         private JBossProcess domain = new JBossProcess("domain");
@@ -192,89 +212,41 @@ public final class AS7Instance implements ServerInstanceImplementation, Lookup.P
                 LogViewer log = new LogViewer(process);
                 log.print();
 
-                cli.setJBossHome(getLocation());
-                cli.setListener(this);
-                cli.connect();
-                semaphore.acquire();
+//                semaphore.acquire();
 
-                if (success) {
+//                if (success) {
                     setState(ServerState.STARTED);
-                } else {
-                    setState(ServerState.STOPPED);
-                }
+//                } else {
+//                    setState(ServerState.STOPPED);
+//                }
             } catch (Exception e) {
                 setState(ServerState.STOPPED);
             }
         }
 
-        @Override
-        public void onCommandCompleted(CommandLineInterface cli) {
-            success = true;
-            semaphore.release();
+    }
 
-            listApplications();
-        }
+    private class StopServerTask implements Runnable {
 
         @Override
-        public void onCommandFail(CommandLineInterface cli, Exception e) {
-            success = false;
-            semaphore.release();
+        public void run() {
+            try {
+                cli.shutdown();
+                setState(ServerState.STOPPED);
+            } catch (IOException e) {
+            }
+            System.out.println("------------- STOP");
         }
 
     }
 
-    private class StopServerTask implements Runnable, CommandLineListener {
+    private class RestartTask implements Runnable  {
 
         @Override
         public void run() {
             System.out.println("------------- STOP");
-            cli.setListener(this);
-            cli.shutdown();
-        }
-
-        @Override
-        public void onCommandCompleted(CommandLineInterface cli) {
-            setState(ServerState.STOPPED);
-        }
-
-        @Override
-        public void onCommandFail(CommandLineInterface cli, Exception e) {
         }
 
     }
 
-    private class RestartTask implements Runnable, CommandLineListener {
-
-        @Override
-        public void run() {
-            System.out.println("------------- STOP");
-            cli.setListener(this);
-            cli.shutdown();
-        }
-
-        @Override
-        public void onCommandCompleted(CommandLineInterface cli) {
-            setState(ServerState.STOPPED);
-            startServer();
-        }
-
-        @Override
-        public void onCommandFail(CommandLineInterface cli, Exception e) {
-        }
-
-    }
-
-    private class ApplicationList implements CommandLineListener {
-
-        @Override
-        public void onCommandCompleted(CommandLineInterface cli) {
-            applications = cli.getApplications();
-            changeSupport.fireChange();
-        }
-
-        @Override
-        public void onCommandFail(CommandLineInterface cli, Exception e) {
-        }
-
-    }
 }

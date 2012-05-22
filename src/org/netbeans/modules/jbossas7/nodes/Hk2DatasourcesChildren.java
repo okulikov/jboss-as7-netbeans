@@ -4,6 +4,8 @@
  */
 package org.netbeans.modules.jbossas7.nodes;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -17,34 +19,39 @@ import org.openide.util.WeakListeners;
  *
  * @author kulikov
  */
-public class Hk2InstanceChildren extends Children.Keys<Node> implements Refreshable, ChangeListener {
+public class Hk2DatasourcesChildren extends Children.Keys<Node> implements Refreshable, ChangeListener {
 
     private AS7Instance serverInstance;
 
-    public Hk2InstanceChildren(AS7Instance si) {
+    public Hk2DatasourcesChildren(AS7Instance si) {
         this.serverInstance = si;
         serverInstance.addChangeListener(WeakListeners.change(this, serverInstance));
     }
 
     @Override
     protected Node[] createNodes(Node key) {
-        System.out.println(";;;;; Create node: " + key);
+        System.out.println(";;;;; Application children: Create node: " + key);
         return new Node[]{key};
     }
 
     @Override
     public void updateKeys() {
-        System.out.println("Instance-children: Update keys: ");
+        System.out.println(";;;;; Application children: Update keys: ");
         Vector<Node> keys = new Vector<Node>();
 
-        if (serverInstance.getState() == AS7Instance.ServerState.STARTED) {
-            keys.add(new Hk2ItemNode(serverInstance, new Hk2ExtensionChildren(serverInstance), "Extensions"));
-            keys.add(new Hk2ItemNode(serverInstance, new Hk2ApplicationChildren(serverInstance), "Applications"));
-            keys.add(new Hk2ItemNode(serverInstance, new Hk2ResourcesChildren(serverInstance), "Resources"));
-            keys.add(new Hk2ItemNode(serverInstance, new Hk2WSChildren(serverInstance), "Web services"));
-        }
+        Collection<String> apps = serverInstance.getDatasources();
 
+        if (apps != null) {
+            for (String name : apps) {
+                keys.add(new Hk2ItemNode(serverInstance, name));
+            }
+        }
         setKeys(keys);
+    }
+
+    @Override
+    protected void addNotify() {
+        updateKeys();
     }
 
     @Override

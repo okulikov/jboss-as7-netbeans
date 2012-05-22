@@ -4,6 +4,7 @@
  */
 package org.netbeans.modules.jbossas7.nodes;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.event.ChangeEvent;
@@ -38,7 +39,7 @@ public class Hk2ApplicationChildren extends Children.Keys<Node> implements Refre
         System.out.println(";;;;; Application children: Update keys: ");
         Vector<Node> keys = new Vector<Node>();
 
-        List<String> apps = serverInstance.getApplications();
+        Collection<String> apps = serverInstance.getApplications();
 
         if (apps != null) {
             for (String name : apps) {
@@ -46,6 +47,11 @@ public class Hk2ApplicationChildren extends Children.Keys<Node> implements Refre
             }
         }
         setKeys(keys);
+    }
+
+    @Override
+    protected void addNotify() {
+        updateKeys();
     }
 
     @Override
