@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Vector;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.netbeans.modules.jbossas7.AS7Instance;
+import org.netbeans.modules.jbossas7.AS7Standalone;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Mutex;
@@ -21,9 +21,9 @@ import org.openide.util.WeakListeners;
  */
 public class Hk2ResourcesChildren extends Children.Keys<Node> implements Refreshable, ChangeListener {
 
-    private AS7Instance serverInstance;
+    private AS7Standalone serverInstance;
 
-    public Hk2ResourcesChildren(AS7Instance si) {
+    public Hk2ResourcesChildren(AS7Standalone si) {
         this.serverInstance = si;
         serverInstance.addChangeListener(WeakListeners.change(this, serverInstance));
     }
@@ -39,7 +39,7 @@ public class Hk2ResourcesChildren extends Children.Keys<Node> implements Refresh
         System.out.println(";;;;; Application children: Update keys: ");
         Vector<Node> keys = new Vector<Node>();
 
-        if (serverInstance.getState() == AS7Instance.ServerState.STARTED) {
+        if (serverInstance.getState() == AS7Standalone.ServerState.STARTED) {
             keys.add(new Hk2ItemNode(serverInstance, new Hk2DatasourcesChildren(serverInstance), "Datasource"));
         }
 

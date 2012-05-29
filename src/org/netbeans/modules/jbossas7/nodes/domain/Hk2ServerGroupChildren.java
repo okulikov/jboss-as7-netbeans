@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.netbeans.modules.jbossas7.nodes;
+package org.netbeans.modules.jbossas7.nodes.domain;
 
+import org.netbeans.modules.jbossas7.nodes.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Vector;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.netbeans.modules.jbossas7.AS7Standalone;
+import org.netbeans.modules.jbossas7.AS7Domain;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Mutex;
@@ -19,11 +19,11 @@ import org.openide.util.WeakListeners;
  *
  * @author kulikov
  */
-public class Hk2ExtensionChildren extends Children.Keys<Node> implements Refreshable, ChangeListener {
+public class Hk2ServerGroupChildren extends Children.Keys<Node> implements Refreshable, ChangeListener {
 
-    private AS7Standalone serverInstance;
+    private AS7Domain serverInstance;
 
-    public Hk2ExtensionChildren(AS7Standalone si) {
+    public Hk2ServerGroupChildren(AS7Domain si) {
         this.serverInstance = si;
         serverInstance.addChangeListener(WeakListeners.change(this, serverInstance));
     }
@@ -37,7 +37,7 @@ public class Hk2ExtensionChildren extends Children.Keys<Node> implements Refresh
     public void updateKeys() {
         Vector<Node> keys = new Vector<Node>();
 
-        Collection<String> apps = serverInstance.getExtensions();
+        Collection<String> apps = serverInstance.getServerGroups();
 
         if (apps != null) {
             for (String name : apps) {

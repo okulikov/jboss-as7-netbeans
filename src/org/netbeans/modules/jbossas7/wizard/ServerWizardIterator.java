@@ -15,6 +15,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.api.server.ServerInstance;
 import org.netbeans.modules.jbossas7.AS7Instance;
+import org.netbeans.modules.jbossas7.AS7Standalone;
 import org.netbeans.modules.jbossas7.AS7InstanceProvider;
 import org.openide.WizardDescriptor;
 import org.openide.WizardDescriptor.Panel;

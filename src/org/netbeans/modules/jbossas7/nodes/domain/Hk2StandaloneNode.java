@@ -2,15 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.netbeans.modules.jbossas7.nodes;
+package org.netbeans.modules.jbossas7.nodes.domain;
 
 import java.awt.Component;
 import java.awt.Image;
 import javax.swing.Action;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import org.netbeans.modules.jbossas7.AS7Instance;
+import org.netbeans.modules.jbossas7.AS7Standalone;
 import org.netbeans.modules.jbossas7.action.*;
+import org.netbeans.modules.jbossas7.nodes.Hk2InstanceChildren;
+import org.netbeans.modules.jbossas7.nodes.Refreshable;
 import org.netbeans.modules.jbossas7.nodes.action.RefreshModulesCookie;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
@@ -26,13 +28,13 @@ import org.openide.util.lookup.ProxyLookup;
  *
  * @author kulikov
  */
-public class Hk2InstanceNode extends AbstractNode implements ChangeListener {
+public class Hk2StandaloneNode extends AbstractNode implements ChangeListener {
 
     private static final String ICON_BASE = "org/netbeans/modules/jbossas7/nodes/jbossas7.png";
-    private AS7Instance serverInstance;
+    private AS7Standalone serverInstance;
     private InstanceContent instanceContent;
 
-    public Hk2InstanceNode(final AS7Instance instance, boolean isFullNode) {
+    public Hk2StandaloneNode(final AS7Standalone instance, boolean isFullNode) {
 
         this(instance, new InstanceContent(), isFullNode);
 
@@ -42,7 +44,7 @@ public class Hk2InstanceNode extends AbstractNode implements ChangeListener {
 
     }
 
-    private Hk2InstanceNode(final AS7Instance instance, final InstanceContent ic, boolean isFullNode) {
+    private Hk2StandaloneNode(final AS7Standalone instance, final InstanceContent ic, boolean isFullNode) {
         super(isFullNode ? new Hk2InstanceChildren(instance) : Children.LEAF,
                 new ProxyLookup(new AbstractLookup(ic), instance.getLookup()));
 

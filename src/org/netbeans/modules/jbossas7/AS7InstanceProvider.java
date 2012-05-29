@@ -42,7 +42,7 @@ public class AS7InstanceProvider implements ServerInstanceProvider, LookupListen
 
     public AS7Instance createInstance(String name, String location, boolean isDomain) {
         //create new instance
-        AS7Instance server = new AS7Instance(name, location, isDomain);
+        AS7Instance server = isDomain? new AS7Domain(name, location) : new AS7Standalone(name, location);
 
         //put into map
         instances.put(name, server);
@@ -136,11 +136,11 @@ public class AS7InstanceProvider implements ServerInstanceProvider, LookupListen
     }
 
     private AS7Instance readInstanceFromFile(FileObject instanceFO) {
-        String name = (String) instanceFO.getAttribute(AS7Instance.NAME);
-        String location = (String) instanceFO.getAttribute(AS7Instance.LOCATION);
-        boolean isDomain = Boolean.valueOf((String) instanceFO.getAttribute(AS7Instance.LOCATION));
+        String name = (String) instanceFO.getAttribute(AS7Standalone.NAME);
+        String location = (String) instanceFO.getAttribute(AS7Standalone.LOCATION);
+        boolean isDomain = Boolean.valueOf((String) instanceFO.getAttribute(AS7Standalone.DOMAIN_MODE));
 
-        return new AS7Instance(name, location, isDomain);
+        return isDomain ? new AS7Domain(name, location) : new AS7Standalone(name, location);
     }
 
     private void writeInstanceToFile(AS7Instance instance, boolean search) throws IOException {
@@ -148,9 +148,11 @@ public class AS7InstanceProvider implements ServerInstanceProvider, LookupListen
         String name = FileUtil.findFreeFileName(dir, "instance", null);
         FileObject instanceFO = dir.createData(name);
 
+        boolean isDomain = instance instanceof AS7Domain;
+
         instanceFO.setAttribute(AS7Instance.NAME, instance.getDisplayName());
         instanceFO.setAttribute(AS7Instance.LOCATION, instance.getLocation());
-        instanceFO.setAttribute(AS7Instance.DOMAIN_MODE, Boolean.toString(instance.isDomain()));
+        instanceFO.setAttribute(AS7Instance.DOMAIN_MODE, Boolean.toString(isDomain));
     }
 
     private void removeInstanceFromFile(AS7Instance instance) throws IOException {
