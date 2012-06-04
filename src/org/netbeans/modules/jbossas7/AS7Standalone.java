@@ -13,8 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.api.server.ServerInstance;
-import org.netbeans.modules.jbossas7.nodes.domain.Hk2DomainNode;
-import org.netbeans.modules.jbossas7.nodes.domain.Hk2StandaloneNode;
+import org.netbeans.modules.jbossas7.nodes.Hk2StandaloneNode;
 import org.netbeans.spi.server.ServerInstanceFactory;
 import org.netbeans.spi.server.ServerInstanceImplementation;
 import org.openide.nodes.Node;
@@ -27,9 +26,6 @@ import org.openide.util.lookup.InstanceContent;
  * @author kulikov
  */
 public final class AS7Standalone implements AS7Instance, ServerInstanceImplementation, Lookup.Provider, LookupListener {
-    public enum ServerState {
-        STARTING, STARTED, STOPPED;
-    }
 
     //instance properties
     private String name;
@@ -72,6 +68,7 @@ public final class AS7Standalone implements AS7Instance, ServerInstanceImplement
         lookup = new AbstractLookup(ic);
     }
 
+    @Override
     public ServerState getState() {
         return state;
     }
@@ -81,6 +78,7 @@ public final class AS7Standalone implements AS7Instance, ServerInstanceImplement
         changeSupport.fireChange();
     }
 
+    @Override
     public String getLocation() {
         return this.location;
     }
@@ -89,6 +87,7 @@ public final class AS7Standalone implements AS7Instance, ServerInstanceImplement
         return this.isDomain;
     }
 
+    @Override
     public ServerInstance getCommonInstance() {
         return commonInstance;
     }
@@ -170,18 +169,22 @@ public final class AS7Standalone implements AS7Instance, ServerInstanceImplement
         changeSupport.addChangeListener(listener);
     }
 
+    @Override
     public void updateModuleSupport() {
     }
 
-    public void startServer() {
+    @Override
+    public void start() {
         RP.post(startServer);
     }
 
-    public void stopServer() {
+    @Override
+    public void stop() {
         RP.post(stopServer);
     }
 
-    public void restartServer() {
+    @Override
+    public void restart() {
         RP.post(restartServer);
     }
 

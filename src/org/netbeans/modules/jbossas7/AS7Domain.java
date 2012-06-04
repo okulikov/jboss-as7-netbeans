@@ -27,9 +27,6 @@ import org.openide.util.lookup.InstanceContent;
  * @author kulikov
  */
 public final class AS7Domain implements AS7Instance, ServerInstanceImplementation, Lookup.Provider, LookupListener {
-    public enum ServerState {
-        STARTING, STARTED, STOPPED;
-    }
 
     //instance properties
     private String name;
@@ -80,6 +77,7 @@ public final class AS7Domain implements AS7Instance, ServerInstanceImplementatio
 
     }
 
+    @Override
     public ServerState getState() {
         return state;
     }
@@ -209,10 +207,12 @@ public final class AS7Domain implements AS7Instance, ServerInstanceImplementatio
     public void updateModuleSupport() {
     }
 
+    @Override
     public void start() {
         RP.post(startServer);
     }
 
+    @Override
     public void stop() {
         try {
             ManagementUtil.exec(controllerAddress, "{\"operation\":\"shutdown\",\"address\":[{\"host\":\"*\"}],\"json.pretty\":1}");
@@ -222,6 +222,7 @@ public final class AS7Domain implements AS7Instance, ServerInstanceImplementatio
         //RP.post(stopServer);
     }
 
+    @Override
     public void restart() {
         RP.post(restartServer);
     }

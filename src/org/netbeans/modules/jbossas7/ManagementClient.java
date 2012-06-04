@@ -8,7 +8,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +28,13 @@ public class ManagementClient {
             address = new URL("http://localhost:9990/management");
         } catch (Exception e) {
         }
+        Authenticator.setDefault(new Authenticator() {
+
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("administrator", "123456".toCharArray());
+            }
+        });
     }
 
     public Collection<String> getApplications(String serverName) {

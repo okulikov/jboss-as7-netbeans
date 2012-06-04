@@ -10,7 +10,6 @@ import javax.swing.Action;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.modules.jbossas7.AS7Domain;
-import org.netbeans.modules.jbossas7.AS7Standalone;
 import org.netbeans.modules.jbossas7.action.*;
 import org.netbeans.modules.jbossas7.nodes.Refreshable;
 import org.netbeans.modules.jbossas7.nodes.action.RefreshModulesCookie;
@@ -90,10 +89,10 @@ public class Hk2DomainNode extends AbstractNode implements ChangeListener {
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
-            SystemAction.get(StartDomainAction.class),
+            SystemAction.get(StartServerAction.class),
             SystemAction.get(DebugServerAction.class),
-            SystemAction.get(RestartDomainAction.class),
-            SystemAction.get(StopDomainAction.class),
+            SystemAction.get(RestartServerAction.class),
+            SystemAction.get(StopServerAction.class),
             null,
             SystemAction.get(RemoveAction.class),
             null,
