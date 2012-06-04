@@ -28,13 +28,6 @@ public class ManagementClient {
             address = new URL("http://localhost:9990/management");
         } catch (Exception e) {
         }
-        Authenticator.setDefault(new Authenticator() {
-
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("administrator", "123456".toCharArray());
-            }
-        });
     }
 
     public Collection<String> getApplications(String serverName) {

@@ -46,11 +46,13 @@ public class ServerWizardIterator implements WizardDescriptor.InstantiatingItera
     public Set instantiate() throws IOException {
         String name = (String) wizard.getProperty("ServInstWizard_displayName");
         String path = locationPanel.getServerLocation();
+        String username = locationPanel.getUserName();
+        String password = locationPanel.getPassword();
         Boolean isDomain = locationPanel.isDomain();
 
         Set<ServerInstance> result = new HashSet<ServerInstance>();
 
-        AS7Instance server = as7Provider.createInstance(name, path, isDomain);
+        AS7Instance server = as7Provider.createInstance(name, path, username, password, isDomain);
         server.updateModuleSupport();
 
         result.add(server.getCommonInstance());

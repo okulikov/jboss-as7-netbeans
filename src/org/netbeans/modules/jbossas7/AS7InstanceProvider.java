@@ -40,9 +40,9 @@ public class AS7InstanceProvider implements ServerInstanceProvider, LookupListen
         return provider;
     }
 
-    public AS7Instance createInstance(String name, String location, boolean isDomain) {
+    public AS7Instance createInstance(String name, String location, String username, String password, boolean isDomain) {
         //create new instance
-        AS7Instance server = isDomain? new AS7Domain(name, location) : new AS7Standalone(name, location);
+        AS7Instance server = isDomain? new AS7Domain(name, location, username, password) : new AS7Standalone(name, location, username, password);
 
         //put into map
         instances.put(name, server);
@@ -138,9 +138,11 @@ public class AS7InstanceProvider implements ServerInstanceProvider, LookupListen
     private AS7Instance readInstanceFromFile(FileObject instanceFO) {
         String name = (String) instanceFO.getAttribute(AS7Standalone.NAME);
         String location = (String) instanceFO.getAttribute(AS7Standalone.LOCATION);
+        String username = (String) instanceFO.getAttribute(AS7Standalone.USER_NAME);
+        String password = (String) instanceFO.getAttribute(AS7Standalone.PASSWORD);
         boolean isDomain = Boolean.valueOf((String) instanceFO.getAttribute(AS7Standalone.DOMAIN_MODE));
 
-        return isDomain ? new AS7Domain(name, location) : new AS7Standalone(name, location);
+        return isDomain ? new AS7Domain(name, location, username, password) : new AS7Standalone(name, location, username, password);
     }
 
     private void writeInstanceToFile(AS7Instance instance, boolean search) throws IOException {
@@ -152,6 +154,8 @@ public class AS7InstanceProvider implements ServerInstanceProvider, LookupListen
 
         instanceFO.setAttribute(AS7Instance.NAME, instance.getDisplayName());
         instanceFO.setAttribute(AS7Instance.LOCATION, instance.getLocation());
+        instanceFO.setAttribute(AS7Instance.USER_NAME, instance.getUserName());
+        instanceFO.setAttribute(AS7Instance.PASSWORD, instance.getPassword());
         instanceFO.setAttribute(AS7Instance.DOMAIN_MODE, Boolean.toString(isDomain));
     }
 

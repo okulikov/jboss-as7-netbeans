@@ -89,6 +89,13 @@ public class AddServerLocationPanel implements WizardDescriptor.FinishablePanel,
         return component.getServerLocation();
     }
 
+    public String getUserName() {
+        return component.getUserName();
+    }
+    public String getPassword() {
+        return component.getPassword();
+    }
+
     public boolean isDomain() {
         return component.isDomain();
     }
