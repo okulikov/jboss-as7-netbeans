@@ -37,11 +37,11 @@ public class Hk2HostsChildren extends Children.Keys<Node> implements Refreshable
     public void updateKeys() {
         Vector<Node> keys = new Vector<Node>();
 
-        Collection<String> apps = serverInstance.getHosts();
+        Collection<String> hosts = serverInstance.getHosts();
 
-        if (apps != null) {
-            for (String name : apps) {
-                keys.add(new Hk2ItemNode(serverInstance, new Hk2ServerChildren(serverInstance, name), name));
+        if (hosts != null) {
+            for (String host : hosts) {
+                keys.add(new Hk2ItemNode(serverInstance, new Hk2ServerChildren(serverInstance, host), host));
             }
         }
         setKeys(keys);

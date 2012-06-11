@@ -80,9 +80,10 @@ public final class AS7Domain extends AS7Server {
         }
     }
 
-    public Collection<String> getDatasources() {
+    public Collection<String> getDatasources(String host, String server) {
+        String cmd = String.format("{\"operation\":\"read-children-types\", \"address\":[{\"host\":\"%s\"},{\"server\":\"%s\"},{\"subsystem\":\"datasources\"}],\"json.pretty\":1}", host, server);
         try {
-            return cli.getDataSources();
+            return ManagementUtil.list(controllerAddress, cmd);
         } catch (IOException e) {
             return new ArrayList();
         }

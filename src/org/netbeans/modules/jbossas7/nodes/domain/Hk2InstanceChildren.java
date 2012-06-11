@@ -19,33 +19,34 @@ import org.openide.util.WeakListeners;
  *
  * @author kulikov
  */
-public class Hk2ServerChildren extends Children.Keys<Node> implements Refreshable, ChangeListener {
+public class Hk2InstanceChildren extends Children.Keys<Node> implements Refreshable, ChangeListener {
 
-    private AS7Domain domain;
+    private AS7Domain serverInstance;
     private String host;
+    private String server;
 
-    public Hk2ServerChildren(AS7Domain si, String hostName) {
-        this.host = hostName;
-        this.domain = si;
-        domain.addChangeListener(WeakListeners.change(this, domain));
+    public Hk2InstanceChildren(AS7Domain si, String host, String server) {
+        this.serverInstance = si;
+        this.host = host;
+        this.server = server;
+        serverInstance.addChangeListener(WeakListeners.change(this, serverInstance));
     }
 
     @Override
     protected Node[] createNodes(Node key) {
+        System.out.println(";;;;; Application children: Create node: " + key);
         return new Node[]{key};
     }
 
     @Override
     public void updateKeys() {
+        System.out.println(";;;;; Application children: Update keys: ");
         Vector<Node> keys = new Vector<Node>();
 
-        Collection<String> servers = domain.getServer(host);
+        Hk2DatasourcesChildren datasourcesNode = new Hk2DatasourcesChildren(serverInstance, host, server);
 
-        if (servers != null) {
-            for (String server : servers) {
-                keys.add(new Hk2ItemNode(domain, new Hk2InstanceChildren(domain, host, server), server));
-            }
-        }
+        keys.add(new Hk2ItemNode(serverInstance, datasourcesNode, "Datasources"));
+        
         setKeys(keys);
     }
 

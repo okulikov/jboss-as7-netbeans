@@ -62,6 +62,10 @@ public class ManagementUtil {
     }
 
     private static String read(InputStream in) throws IOException {
+        if (in == null) {
+            return "";
+        }
+        
         int b;
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         while ((b = in.read()) != -1) {
