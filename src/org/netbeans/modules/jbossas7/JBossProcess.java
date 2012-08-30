@@ -63,7 +63,7 @@ public class JBossProcess {
     private NbProcessDescriptor createProcessDescriptor() throws ProcessCreationException {
         String startScript = jbossHome + File.separator + "bin" + File.separator + name;
         if (Utilities.isWindows()) {
-            startScript += ".exe"; // NOI18N
+            startScript += ".bat"; // NOI18N
         } else {
             startScript += ".sh";
         }
